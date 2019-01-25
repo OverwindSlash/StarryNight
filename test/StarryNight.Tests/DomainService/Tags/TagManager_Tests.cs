@@ -36,6 +36,37 @@ namespace StarryNight.Tests.DomainService.Tags
         }
 
         [Fact]
+        public async Task GetTagByNameAsync_Tests()
+        {
+            // Root 1
+            CreateTagDto createRoot1TagDto = new CreateTagDto { Name = "Root1" };
+            var root1TagDto = await tagAppService.Create(createRoot1TagDto);
+
+            // Sub 11
+            CreateTagDto createSub11TagDto = new CreateTagDto { Name = "Sub11", ParentId = root1TagDto.Id };
+            var sub11TagDto = await tagAppService.Create(createSub11TagDto);
+
+            // Leaf 111
+            CreateTagDto createLeaf111TagDto = new CreateTagDto { Name = "Leaf111", ParentId = sub11TagDto.Id };
+            var leaf111TagDto = await tagAppService.Create(createLeaf111TagDto);
+
+            ICollection<Tag> tags1 = await tagManager.GetTagsByNameAsync("Root");
+            tags1.Count.ShouldBe(1);
+
+            ICollection<Tag> tags2 = await tagManager.GetTagsByNameAsync("Sub");
+            tags2.Count.ShouldBe(1);
+
+            ICollection<Tag> tags3 = await tagManager.GetTagsByNameAsync("Leaf");
+            tags3.Count.ShouldBe(1);
+
+            ICollection<Tag> tags4 = await tagManager.GetTagsByNameAsync("11");
+            tags4.Count.ShouldBe(2);
+
+            ICollection<Tag> tags5 = await tagManager.GetTagsByNameAsync("1");
+            tags5.Count.ShouldBe(3);
+        }
+
+        [Fact]
         public async Task GetTargetsOfTagAsync_Tests()
         {
             string Sql1 = @"SELECT Id, Name FROM Product WHERE VisibleIndividually = @vi AND ApprovedRatingSum = @ars";

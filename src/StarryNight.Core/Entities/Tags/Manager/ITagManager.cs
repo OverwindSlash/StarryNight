@@ -10,6 +10,8 @@ namespace StarryNight.Entities
     {
         Task<ICollection<Tag>> GetAllRootTagsAsync();
 
+        Task<ICollection<Tag>> GetTagsByNameAsync(string name);
+
         Task<Tag> RenameTag(Tag tag, string name);
 
         ICollection<Target> GetTargetsOfTag(Tag tag, int takeNum = 100, int skipNum = 0);

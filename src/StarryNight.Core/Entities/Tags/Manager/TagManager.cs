@@ -23,6 +23,11 @@ namespace StarryNight.Entities
             return await tagRepository.GetAllListAsync(t => t.ParentId.HasValue != true);
         }
 
+        public async Task<ICollection<Tag>> GetTagsByNameAsync(string name)
+        {
+            return await tagRepository.GetAllListAsync(t => t.Name.Contains(name));
+        }
+
         public async Task<Tag> RenameTag(Tag tag, string name)
         {
             tag.Name = name;

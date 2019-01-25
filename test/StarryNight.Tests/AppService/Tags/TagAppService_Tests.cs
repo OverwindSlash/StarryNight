@@ -281,5 +281,44 @@ namespace StarryNight.Tests.AppService.Tags
                 shiftedSubTag.Children.Count.ShouldBe(1);
             });
         }
+
+
+        [Fact]
+        public async Task GetByName_Test()
+        {
+            // Root 1
+            CreateTagDto createRoot1TagDto = new CreateTagDto { Name = "Root1" };
+            var root1TagDto = await tagAppService.Create(createRoot1TagDto);
+
+            // Sub 11
+            CreateTagDto createSub11TagDto = new CreateTagDto { Name = "Sub11", ParentId = root1TagDto.Id };
+            var sub11TagDto = await tagAppService.Create(createSub11TagDto);
+
+            // Leaf 111
+            CreateTagDto createLeaf111TagDto = new CreateTagDto { Name = "Leaf111", ParentId = sub11TagDto.Id };
+            var leaf111TagDto = await tagAppService.Create(createLeaf111TagDto);
+
+            // Leaf 112
+            CreateTagDto createLeaf112TagDto = new CreateTagDto { Name = "Leaf112", ParentId = sub11TagDto.Id };
+            var leaf112TagDto = await tagAppService.Create(createLeaf112TagDto);
+
+            // Sub 12
+            CreateTagDto createSub12TagDto = new CreateTagDto { Name = "Sub12", ParentId = root1TagDto.Id };
+            var sub12TagDto = await tagAppService.Create(createSub12TagDto);
+
+            // Leaf 121
+            CreateTagDto createLeaf121TagDto = new CreateTagDto { Name = "Leaf111", ParentId = sub12TagDto.Id };
+            var leaf121TagDto = await tagAppService.Create(createLeaf121TagDto);
+
+            // Leaf 122
+            CreateTagDto createLeaf122TagDto = new CreateTagDto { Name = "Leaf112", ParentId = sub12TagDto.Id };
+            var leaf122TagDto = await tagAppService.Create(createLeaf122TagDto);
+
+            ICollection<TagDto> tags1 = await tagAppService.GetByName("111");
+            tags1.Count.ShouldBe(2);
+
+            ICollection<TagDto> tags2 = await tagAppService.GetByName("12");
+            tags2.Count.ShouldBe(3);
+        }
     }
 }

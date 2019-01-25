@@ -38,6 +38,22 @@ namespace StarryNight.Tags
             return rootTagDtos;
         }
 
+        public async Task<ICollection<TagDto>> GetByName(string name)
+        {
+            CheckGetPermission();
+
+            ICollection<Tag> tags = await tagManager.GetTagsByNameAsync(name);
+
+            ICollection<TagDto> rootTagDtos = new List<TagDto>();
+            foreach (var rootTag in tags)
+            {
+                TagDto rootTagDto = MapToEntityDto(rootTag);
+                rootTagDtos.Add(rootTagDto);
+            }
+
+            return rootTagDtos;
+        }
+
         public async Task<TagDto> Rename(TagRenameDto input)
         {
             CheckUpdatePermission();

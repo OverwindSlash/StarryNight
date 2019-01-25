@@ -14,6 +14,7 @@ namespace StarryNight.Tags
     {
         Task<TagDto> Create(CreateTagDto createRootTagDto);
         Task<TagDto> Get(EntityDto<long> entityDto);
+        Task<ICollection<TagDto>> GetByName(string name);
 
         Task<ICollection<TagDto>> GetAllRootTags();
         Task<TagDto> Rename(TagRenameDto input);
